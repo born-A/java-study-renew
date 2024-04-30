@@ -64,7 +64,6 @@ public class PhoneList01 {
 		} catch (IOException e) {
 			System.out.println();
 		} finally {
-			
 				try {
 					if(br != null) br.close();
 				} catch (IOException e) {

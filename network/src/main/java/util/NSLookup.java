@@ -8,19 +8,24 @@ public class NSLookup {
 
 	public static void main(String[] args) {
 		try {
-			Scanner sc = new Scanner(System.in);
-			String domain = sc.nextLine();
+			while(true) {
+				System.out.print(">>");
+				Scanner sc = new Scanner(System.in);
+				String domain = sc.nextLine();
+				
+				if("exit".equals(domain)) {
+					break;
+				} 
 			
-			InetAddress[] inetAddresses = InetAddress.getAllByName(domain);
 			
-			for(InetAddress inetAddress : inetAddresses) {
-				byte[] ipAddresses = inetAddress.getAddress();
-				System.out.println(inetAddress);
+				InetAddress[] inetAddresses = InetAddress.getAllByName(domain);
+			
+				for(InetAddress inetAddress : inetAddresses) {
+					System.out.println(inetAddress);
+				}	
 			}
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
+		}catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
 	}
-
 }

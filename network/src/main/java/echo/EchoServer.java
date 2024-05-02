@@ -19,43 +19,17 @@ public class EchoServer {
 		try {
 			serverSocket = new ServerSocket();
 
-			serverSocket.bind(new InetSocketAddress("0.0.0.0", PORT), 10);
-			Socket socket = serverSocket.accept();  // blocking
+			serverSocket.bind(new InetSocketAddress("127.0.0.1", PORT), 10);
+			log("starts....[port : " + PORT +"]");
 			
-			try {
-				InetSocketAddress inetRemoteSocketAddress = (InetSocketAddress)socket.getRemoteSocketAddress();
-				String remoteHostAddress = inetRemoteSocketAddress.getAddress().getHostAddress();
-				int remotePort = inetRemoteSocketAddress.getPort();
-				log("connected by client[" + remoteHostAddress + ":" + remotePort + "]");
-				
-				PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "utf-8"), true);
-				BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "utf-8"));
-				
-				while(true) {
-					String data = br.readLine(); // blocking
-					if(data == null) {
-						log("closed by client");
-						break;
-					}
-					log("received:" + data);
-					pw.println(data);
-				}
-			} catch(SocketException e) {
-				log("suddenly closed by client");
-			} catch(IOException e) {
-				log("error:" + e);
-			} finally {
-				try {
-					if(socket != null && !socket.isClosed()) {
-						socket.close();
-					}
-				} catch(IOException e) {
-					e.printStackTrace();
-				}
+			while(true) {
+				Socket socket = serverSocket.accept();
+				new EchoRequestHandler(socket).start();
 			}
-		} catch (IOException e) {
+		}
+			catch (IOException e) {
 			log("error: " + e);
-		} finally {
+			} finally {
 			try {
 				if(serverSocket != null && !serverSocket.isClosed()) {
 					serverSocket.close();
@@ -66,7 +40,7 @@ public class EchoServer {
 		}
 	}
 	
-	private static void log(String message) {
+	public static void log(String message) {
 		System.out.println("[EchoServer] " + message);
 	}
 }

@@ -15,13 +15,13 @@ public class ChatClient {
 	public void start() {
 		Socket socket = null;
 		BufferedReader in = null;
-		Scanner scanner = null;
+		Scanner scanner =  new Scanner(System.in);
+		
 		try {
-			scanner = new Scanner(System.in);
-			socket = new Socket("localhost", 8000);
+
+			socket = new Socket("localhost", 8000); 
 			System.out.println("[서버와 연결되었습니다]");
 
-//			String name = "user" + (int)(Math.random()*10);
 			System.out.print("닉네임>>");
 			String name = scanner.nextLine();
 			
@@ -31,11 +31,11 @@ public class ChatClient {
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			while (true) {
 				String inputMsg = in.readLine();
-				if(("[" + name + "]님이 나가셨습니다").equals(inputMsg)) break;
-				System.out.println("From:" + inputMsg);
+				if(("[" + name + "]님이 퇴장 하였습니다.").equals(inputMsg)) break;
+				System.out.println(inputMsg);
 			}
 		} catch (IOException e) {
-			System.out.println("[서버 접속끊김]");
+			System.out.println("server connection cut off");
 		} finally {
 			try {
 				socket.close();
@@ -43,6 +43,7 @@ public class ChatClient {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("[서버 연결종료]");
+		scanner.close();
+		System.out.println("server connection closed");
 	}
 }

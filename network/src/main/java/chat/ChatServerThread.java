@@ -47,7 +47,7 @@ public class ChatServerThread extends Thread{
 			} else if("quit".equals(tokens[0])) {
 				sendAll("[" + nickname + "]님이 퇴장 하였습니다.");
 			} else {
-				System.out.println("에러:알 수 없는 요청 (" + tokens[0] + ")");
+				System.out.println("error input : (" + tokens[0] + ")");
 			}
 		} catch (IOException e) {
 			System.out.println("[" + nickname + " 접속끊김]");
@@ -60,13 +60,13 @@ public class ChatServerThread extends Thread{
 //				e.printStackTrace();
 //			}
 		}
-//		System.out.println("연결종료");
+		System.out.println("connection closed");
 		}
 	}
 	
 	private void doJoin(String nickname, Writer writer) {
 		this.nickname = nickname;
-		sendAll("[" + nickname + "]님이 들어오셨습니다.");
+		sendAll("[" + nickname + "]님이 입장 하였습니다.");
 		/* writer pool 에 저장 */
 		addWriter(writer);
 		

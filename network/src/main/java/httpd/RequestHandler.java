@@ -83,8 +83,8 @@ public class RequestHandler extends Thread {
 		
 		// nio
 		byte[] body = Files.readAllBytes(file.toPath());
-		String contentType = Files.probeContentType(file.toPath());
-		
+//		String contentType = Files.probeContentType(file.toPath());
+		String contentType = URLConnection.guessContentTypeFromName(file.toPath().toString());
 		outputStream.write((protocol + "400 Server Error\n").getBytes("UTF-8"));
 		outputStream.write(("Content-Type:" + contentType + "; charset=utf-8\n").getBytes("UTF-8"));
 		outputStream.write("\n".getBytes());
@@ -105,8 +105,8 @@ public class RequestHandler extends Thread {
 		
 		// nio
 		byte[] body = Files.readAllBytes(file.toPath());
-		String contentType = Files.probeContentType(file.toPath());
-		
+//		String contentType = Files.probeContentType(file.toPath());
+		String contentType = URLConnection.guessContentTypeFromName(file.toPath().toString());
 //		if(contentType == null) {
 //			contentType = URLConnection.guessContentTypeFromName("/assets/css/mysite.css");
 //		}

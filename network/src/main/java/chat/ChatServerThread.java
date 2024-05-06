@@ -46,21 +46,19 @@ public class ChatServerThread extends Thread{
 				sendAll(nickname + ">>" + tokens[1]);
 			} else if("quit".equals(tokens[0])) {
 				sendAll("[" + nickname + "]님이 퇴장 하였습니다.");
+				break;
 			} else {
 				System.out.println("error input : (" + tokens[0] + ")");
 			}
 		} catch (IOException e) {
 			System.out.println("[" + nickname + " 접속끊김]");
-		} finally {
-//			sendAll("[" + nickname + "]님이 퇴장 하였습니다.");
-//			list.remove(out);
-//			try {
-//				socket.close();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-		}
-		System.out.println("connection closed");
+		} 
+	}
+		list.remove(out);
+		try {
+			socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	

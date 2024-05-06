@@ -38,7 +38,12 @@ public class ChatServerThread extends Thread {
 			while(true) {
 				String str_in = in.readLine();
 				if(str_in == null) throw new IOException(); 
-				server.broadCasting(name + " : " + str_in);
+				if("quit".equals(str_in)) {
+					server.broadCasting("[" + name + "]님이 퇴장 하였습니다.");
+					break;
+				} else {
+					server.broadCasting(name + " : " + str_in);
+				}
 			}	
 		} catch (IOException e) {
 			String outMessage = name + " 님이 퇴장했습니다.";
@@ -47,6 +52,7 @@ public class ChatServerThread extends Thread {
 			server.removeClient(this);
 		} finally {
 			try {
+				server.removeClient(this);
 				socket.close();
 			} catch (IOException e) {
 				e.printStackTrace();

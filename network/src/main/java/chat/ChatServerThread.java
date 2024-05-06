@@ -1,8 +1,10 @@
 package chat;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.net.Socket;
@@ -26,8 +28,8 @@ public class ChatServerThread extends Thread{
 		this.listWriters = listWriters;
 		
 		try {
-			out = new PrintWriter(socket.getOutputStream());
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
 			list.add(out);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -36,9 +38,11 @@ public class ChatServerThread extends Thread{
 		
 	@Override
 	public void run() {
-	while(true) {
 		try {
+			while(true) {
 			String request = in.readLine();
+			if(request == null) throw new IOException();
+			
 			String[] tokens = request.split(":");
 			if("join".equals(tokens[0])) {
 				doJoin(tokens[1], out);	
@@ -50,17 +54,27 @@ public class ChatServerThread extends Thread{
 			} else {
 				System.out.println("error input : (" + tokens[0] + ")");
 			}
+			
+			}
 		} catch (IOException e) {
-			System.out.println("[" + nickname + " 접속끊김]");
-		} 
-	}
-		list.remove(out);
-		try {
-			socket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+			String outMessage = "[" + nickname + "]님이 퇴장 하였습니다.";
+			System.out.println(outMessage);
+			sendAll(outMessage);
+			list.remove(this);
+		} finally {
+			try {
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
+//		list.remove(out);
+//		try {
+//			socket.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	
 	private void doJoin(String nickname, Writer writer) {
 		this.nickname = nickname;
